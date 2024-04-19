@@ -29,19 +29,6 @@ else
     echo "You are super user."
 fi
 
-for i in $@
-do
-    echo "package to install: $i"
-    dnf list installed $i &>>$LOGFILE
-    if [ $? -eq 0 ]
-    then
-        echo -e "$i already installed...$Y SKIPPING $N"
-    else
-        dnf install $i -y &>>$LOGFILE
-        VALIDATE $? "Installation of $i"
-    fi
-done
-
 dnf install mysql-server -y &>>$LOGFILE
 VALIDATE $? "Installation of mysql-server"
 
@@ -52,5 +39,7 @@ systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "Starting mysqld"
 
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 
- 
+mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$LOGFILE
+if [ $? -ne 0]
+then 
+VALIDATE $? "MySql Root Password Setup"
