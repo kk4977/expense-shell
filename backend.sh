@@ -66,6 +66,8 @@ VALIDATE $? "Installed backend dependencies"
 systemctl daemon-reload &>>$LOGFILE
 VALIDATE $? "Reloaded systemd"
 
+cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/
+
 systemctl start backend &>>$LOGFILE
 VALIDATE $? "Started backend"
 
