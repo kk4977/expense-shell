@@ -6,27 +6,25 @@ This guide provides step-by-step instructions to install Apache2 on Ubuntu and d
 
 ### 1. Update Package Lists
 
-
-
 ```bash
- # Update Package Lists
 sudo apt update
 
-```bash
-# Install Apache2
 sudo apt install -y apache2
 
+----------------------------------------------------------------
+
+3. Create a Bash Script for index.html
+Create a Bash script named generate_index.sh to generate the index.html file with server details:
+
 ```bash
-# Create Bash Script to Generate index.html
-cat <<EOF > generate_index.sh
 #!/bin/bash
 
 # Retrieve hostname and IP address
-HOSTNAME=\$(hostname)
-IP_ADDRESS=\$(hostname -I | awk '{print \$1}')
+HOSTNAME=$(hostname)
+IP_ADDRESS=$(hostname -I | awk '{print $1}')
 
 # Generate HTML content for index.html
-cat <<HTML > /var/www/html/index.html
+cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,25 +32,29 @@ cat <<HTML > /var/www/html/index.html
 </head>
 <body>
     <h1>Server Details</h1>
-    <p><strong>Hostname:</strong> \$HOSTNAME</p>
-    <p><strong>IP Address:</strong> \$IP_ADDRESS</p>
+    <p><strong>Hostname:</strong> $HOSTNAME</p>
+    <p><strong>IP Address:</strong> $IP_ADDRESS</p>
 </body>
 </html>
 EOF
 
-```bash
-# Make script executable
+----------------------------------------------------------------
+
 chmod +x generate_index.sh
 
-```bash
-# Run Bash Script to Generate index.html
 sudo ./generate_index.sh
 
-```bash
-# Restart Apache2
 sudo systemctl restart apache2
 
-```bash
-# View Apache2 Status
-sudo systemctl status apache2
+sudo tail -f /var/log/apache2/access.log
+
+
+
+
+
+
+ 
+
+
+
 
